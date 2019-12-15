@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="156.0" prefWidth="440.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <GridPane prefHeight="25.0" prefWidth="440.0" BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="393.0" minWidth="10.0" prefWidth="229.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="92.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <MenuBar id="left" prefWidth="289.0">
+              <menus>
+                <Menu id="language" mnemonicParsing="false" text="Language" />
+                <Menu id="standard" mnemonicParsing="false" text="Standrad" />
+                <Menu id="about" mnemonicParsing="false">
+                     <graphic>
+                        <Label text="?" />
+                     </graphic></Menu>
+              </menus>
+            </MenuBar>
+            <MenuBar id="right" nodeOrientation="RIGHT_TO_LEFT" GridPane.columnIndex="1">
+              <menus>
+                <Menu id="close" mnemonicParsing="false">
+                     <graphic>
+                        <Label text="X" />
+                     </graphic></Menu>
+                <Menu id="minimize" mnemonicParsing="false">
+                     <graphic>
+                        <Label text="_" />
+                     </graphic></Menu>
+              </menus>
+            </MenuBar>
+         </children>
+      </GridPane>
+   </top>
+   <center>
+      <GridPane BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="275.0" minWidth="10.0" prefWidth="106.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="374.0" minWidth="10.0" prefWidth="334.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <GridPane id="textualInformation" GridPane.columnIndex="1">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Text id="name" strokeType="OUTSIDE" strokeWidth="0.0" text="name">
+                     <font>
+                        <Font name="Consolas" size="12.0" />
+                     </font></Text>
+                  <Text id="description" strokeType="OUTSIDE" strokeWidth="0.0" text="description" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="Consolas" size="12.0" />
+                     </font>
+                  </Text>
+               </children>
+            </GridPane>
+            <Pane id="confirmationPan" prefHeight="200.0" prefWidth="200.0" />
+         </children>
+      </GridPane>
+   </center>
+</BorderPane>
