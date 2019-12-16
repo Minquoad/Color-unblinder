@@ -9,16 +9,19 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -41,13 +44,10 @@ public class Launcher extends Application {
 	private Stage stage;
 	private BorderPane mainXontainer;
 
-	private Configuration configuration;
-
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 			robot = new Robot();
-			configuration = new Configuration();
 
 			FXMLLoader loader;
 
@@ -55,31 +55,44 @@ public class Launcher extends Application {
 			loader.setLocation(Launcher.class.getResource("view/Permanent.fxml"));
 			mainXontainer = (BorderPane) loader.load();
 
-			for (Node children : ((GridPane) mainXontainer.getTop()).getChildren()) {
-				for (Menu menu : ((MenuBar) children).getMenus()) {
+			for (Node children : ((Pane) mainXontainer.getTop()).getChildren()) {
 
-					if ("language".equals(menu.getId())) {
+				if ("configurationMenus".equals(children.getId())) {
+					for (Menu menu : ((MenuBar) children).getMenus()) {
+						if ("language".equals(menu.getId())) {
 
-						ToggleGroup toggleGroup = new ToggleGroup();
-						for (Locale locale : InternationalizationTool.getSupportedLocales()) {
-							RadioMenuItem item = new RadioMenuItem();
-							item.setToggleGroup(toggleGroup);
-							item.setId(locale.getLanguage());
-							item.setText(InternationalizationTool.getText(locale.getLanguage(), "resources/Permanent", configuration.getLocale()));
-							item.setSelected(locale.equals(configuration.getLocale()));
-							menu.getItems().add(item);
+							ToggleGroup toggleGroup = new ToggleGroup();
+							for (Locale locale : InternationalizationTool.getSupportedLocales()) {
+								RadioMenuItem item = new RadioMenuItem();
+								item.setToggleGroup(toggleGroup);
+								item.setId(locale.getLanguage());
+								item.setText(InternationalizationTool.getText(locale.getLanguage(), "resources/Permanent"));
+								item.setSelected(locale.equals(Configuration.getLocale()));
+								item.addEventHandler(ActionEvent.ACTION, event -> {
+									Configuration.setLocale(locale);
+									triggerLanguageChanged();
+								});
+								menu.getItems().add(item);
+							}
+
 						}
+					}
+				} else if ("windowButtonsPan".equals(children.getId())) {
 
-					} else if ("about".equals(menu.getId())) {
+					for (Node buttonNode : ((Pane) children).getChildren()) {
+						Button button = (Button) buttonNode;
+						if ("about".equals(button.getId())) {
 
-					} else if ("close".equals(menu.getId())) {
-						menu.getGraphic().addEventHandler(MouseEvent.MOUSE_CLICKED, event -> stage.close());
+						} else if ("close".equals(button.getId())) {
+							button.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> stage.close());
 
-					} else if ("minimize".equals(menu.getId())) {
-						menu.getGraphic().addEventHandler(MouseEvent.MOUSE_CLICKED, event -> stage.setIconified(true));
+						} else if ("iconify".equals(button.getId())) {
+							button.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> stage.setIconified(true));
 
+						}
 					}
 				}
+
 			}
 
 			this.triggerLanguageChanged();
@@ -115,25 +128,32 @@ public class Launcher extends Application {
 
 	public void triggerLanguageChanged() {
 
-		for (Node children : ((GridPane) mainXontainer.getTop()).getChildren()) {
-			for (Menu menu : ((MenuBar) children).getMenus()) {
+		for (Node children : ((Pane) mainXontainer.getTop()).getChildren()) {
 
-				if ("standard".equals(menu.getId())) {
+			if ("configurationMenus".equals(children.getId())) {
+				for (Menu menu : ((MenuBar) children).getMenus()) {
 
-					menu.getItems().clear();
+					if ("standard".equals(menu.getId())) {
 
-					menu.setText(InternationalizationTool.getText("Standard", "resources/Permanent", configuration.getLocale()));
+						((Label) menu.getGraphic()).setText(InternationalizationTool.getText("Standard", "resources/Permanent"));
 
-					ToggleGroup toggleGroup = new ToggleGroup();
-					for (Standard standard : Standard.getAll(configuration.getLocale())) {
-						RadioMenuItem item = new RadioMenuItem();
-						item.setToggleGroup(toggleGroup);
-						item.setId(standard.getId());
-						item.setText(standard.getName());
-						item.setSelected(standard.equals(configuration.getStandard()));
-						menu.getItems().add(item);
+						menu.getItems().clear();
+
+						ToggleGroup toggleGroup = new ToggleGroup();
+						for (Standard standard : Standard.getAll(Configuration.getLocale())) {
+							RadioMenuItem item = new RadioMenuItem();
+							item.setToggleGroup(toggleGroup);
+							item.setId(standard.getId());
+							item.setText(standard.getName());
+							item.setSelected(standard.equals(Configuration.getStandard()));
+							item.addEventHandler(ActionEvent.ACTION, event -> {
+								Configuration.setStandard(standard);
+								updateDisplay();
+							});
+							menu.getItems().add(item);
+						}
+
 					}
-
 				}
 			}
 		}
@@ -144,6 +164,7 @@ public class Launcher extends Application {
 	@Override
 	public void stop() throws Exception {
 		scheduler.shutdown();
+		Configuration.save();
 		super.stop();
 	}
 
@@ -158,7 +179,7 @@ public class Launcher extends Application {
 
 		boolean approximate = false;
 
-		LabeledColorInventory inventory = configuration.getStandard().getInventory();
+		LabeledColorInventory inventory = Configuration.getStandard().getInventory();
 
 		LabeledColor color = inventory.getLabeledColor(red, green, blue);
 
@@ -167,14 +188,15 @@ public class Launcher extends Application {
 			color = inventory.getClosestLabeledColor(red, green, blue);
 		}
 
-		for (Node children : ((GridPane) mainXontainer.getCenter()).getChildren()) {
-			if ("confirmationPan".equals(children.getId())) {
-				children.setStyle("-fx-background-color: rgb(" + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue() + ");");
+		for (Node children : ((Pane) mainXontainer.getCenter()).getChildren()) {
+			
+			if ("confirmation".equals(children.getId())) {
+				((Pane) children).setStyle("-fx-background-color: rgb(" + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue() + ");");
 
-			} else if ("textualInformation".equals(children.getId())) {
-				for (Node subChildren : ((GridPane) children).getChildren()) {
+			} else if ("informations".equals(children.getId())) {
+				for (Node subChildren : ((Pane) children).getChildren()) {
+					
 					if ("name".equals(subChildren.getId())) {
-
 						String text = null;
 						if (approximate) {
 							text = "≈";
@@ -185,15 +207,15 @@ public class Launcher extends Application {
 						((Text) subChildren).setText(text);
 
 					} else if ("description".equals(subChildren.getId())) {
-						String text = InternationalizationTool.getText("R", "resources/Permanent", configuration.getLocale())
+						String text = InternationalizationTool.getText("R", "resources/Permanent")
 								+ ":"
 								+ subColorToPercent(color.getRed())
-								+ "% | "
-								+ InternationalizationTool.getText("G", "resources/Permanent", configuration.getLocale())
+								+ "%    "
+								+ InternationalizationTool.getText("G", "resources/Permanent")
 								+ ":"
 								+ subColorToPercent(color.getGreen())
-								+ "% | "
-								+ InternationalizationTool.getText("B", "resources/Permanent", configuration.getLocale())
+								+ "%    "
+								+ InternationalizationTool.getText("B", "resources/Permanent")
 								+ ":"
 								+ subColorToPercent(color.getBlue())
 								+ "%";

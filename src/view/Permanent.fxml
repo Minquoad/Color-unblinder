@@ -1,63 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="156.0" prefWidth="440.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="256.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <top>
-      <GridPane prefHeight="25.0" prefWidth="440.0" BorderPane.alignment="CENTER">
+      <GridPane prefHeight="25.0" BorderPane.alignment="CENTER">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="393.0" minWidth="10.0" prefWidth="229.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="92.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="393.0" minWidth="10.0" prefWidth="180.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="75.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <MenuBar id="left" prefWidth="289.0">
+            <MenuBar id="configurationMenus" prefHeight="25.0" style="-fx-background-color: black;">
               <menus>
-                <Menu id="language" mnemonicParsing="false" text="Language" />
-                <Menu id="standard" mnemonicParsing="false" text="Standrad" />
-                <Menu id="about" mnemonicParsing="false">
+                <Menu id="language" mnemonicParsing="false">
                      <graphic>
-                        <Label text="?" />
+                        <Label text="Language" textFill="#bfbfbf">
+                           <font>
+                              <Font name="Consolas" size="12.0" />
+                           </font></Label>
+                     </graphic></Menu>
+                <Menu id="standard" mnemonicParsing="false">
+                     <graphic>
+                        <Label text="Standard" textFill="#bfbfbf">
+                           <font>
+                              <Font name="Consolas" size="12.0" />
+                           </font></Label>
                      </graphic></Menu>
               </menus>
             </MenuBar>
-            <MenuBar id="right" nodeOrientation="RIGHT_TO_LEFT" GridPane.columnIndex="1">
-              <menus>
-                <Menu id="close" mnemonicParsing="false">
-                     <graphic>
-                        <Label text="X" />
-                     </graphic></Menu>
-                <Menu id="minimize" mnemonicParsing="false">
-                     <graphic>
-                        <Label text="_" />
-                     </graphic></Menu>
-              </menus>
-            </MenuBar>
+            <FlowPane id="windowButtonsPan" alignment="TOP_RIGHT" orientation="VERTICAL" prefHeight="25.0" GridPane.columnIndex="1">
+               <children>
+                  <Button id="about" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" style="-fx-background-radius: 0; -fx-background-color: black;" text="?" textAlignment="CENTER" textFill="#bfbfbf" />
+                  <Button id="iconify" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" style="-fx-background-radius: 0; -fx-background-color: black;" text="_" textAlignment="CENTER" textFill="#bfbfbf">
+                     <font>
+                        <Font name="Consolas" size="12.0" />
+                     </font></Button>
+                  <Button id="close" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" style="-fx-background-radius: 0; -fx-background-color: black;" text="X" textAlignment="CENTER" textFill="#bfbfbf" />
+               </children>
+            </FlowPane>
          </children>
       </GridPane>
    </top>
    <center>
-      <GridPane BorderPane.alignment="CENTER">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="275.0" minWidth="10.0" prefWidth="106.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="374.0" minWidth="10.0" prefWidth="334.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
+      <FlowPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <GridPane id="textualInformation" GridPane.columnIndex="1">
+            <AnchorPane id="confirmation" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: deeppink;">
+               <FlowPane.margin>
+                  <Insets />
+               </FlowPane.margin>
+            </AnchorPane>
+            <GridPane id="informations" prefHeight="40.0" prefWidth="201.0" style="-fx-background-color: rgb(18,18,18);">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
@@ -66,19 +73,31 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Text id="name" strokeType="OUTSIDE" strokeWidth="0.0" text="name">
-                     <font>
-                        <Font name="Consolas" size="12.0" />
-                     </font></Text>
-                  <Text id="description" strokeType="OUTSIDE" strokeWidth="0.0" text="description" GridPane.rowIndex="1">
+                  <Text id="name" fill="#bfbfbf" strokeType="OUTSIDE" strokeWidth="0.0" text="= Deep pink">
                      <font>
                         <Font name="Consolas" size="12.0" />
                      </font>
+                     <GridPane.margin>
+                        <Insets left="5.0" />
+                     </GridPane.margin>
+                  </Text>
+                  <Text id="description" fill="#bfbfbf" strokeType="OUTSIDE" strokeWidth="0.0" text="R:100%     G:  8%     B: 58%" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <font>
+                        <Font name="Consolas" size="12.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
                   </Text>
                </children>
+               <FlowPane.margin>
+                  <Insets left="5.0" />
+               </FlowPane.margin>
             </GridPane>
-            <Pane id="confirmationPan" prefHeight="200.0" prefWidth="200.0" />
          </children>
-      </GridPane>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" />
+         </padding>
+      </FlowPane>
    </center>
 </BorderPane>
