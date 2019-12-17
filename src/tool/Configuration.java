@@ -27,19 +27,23 @@ public abstract class Configuration {
 			+ "/Color-unblinder"
 			+ "/preferences.json";
 
-	public static final String VERSION = "1.0.0";
+	public static final String VERSION = "0.1.6";
 
 	private static Locale locale;
 	private static Standard standard;
+	private static Unit unit;
 
 	static {
+		Locale defaultLocale = Locale.getDefault();
+		for (Locale supportedLocale : InternationalizationTool.getSupportedLocales())
+			if (locale == null || defaultLocale.getLanguage().equals(supportedLocale.getLanguage()))
+				locale = supportedLocale;
+
+		standard = new HtmlStandard(locale);
+		unit = Unit.BITS;
 
 		File file = new File(PREFERENCES_FILE_PATH);
-		if (!file.exists()) {
-			locale = Locale.ENGLISH;
-			standard = new HtmlStandard(locale);
-
-		} else {
+		if (file.exists()) {
 
 			InputStream bis = null;
 			try {
@@ -54,14 +58,21 @@ public abstract class Configuration {
 
 				JsonNode rootNode = new ObjectMapper().readTree(new String(bos.toByteArray()));
 
-				String language = rootNode.findValue("language").asText();
-				String standardId = rootNode.findValue("standardId").asText();
+				String version = rootNode.findValue("version").asText();
+				if (Configuration.VERSION.equals(version)) {
 
-				locale = new Locale(language);
+					String language = rootNode.findValue("language").asText();
+					String standardId = rootNode.findValue("standardId").asText();
+					String unit = rootNode.findValue("unit").asText();
 
-				for (Standard standard : Standard.getAll(locale))
-					if (standard.getId().equals(standardId))
-						Configuration.standard = standard;
+					locale = new Locale(language);
+
+					for (Standard standard : Standard.getAll(locale))
+						if (standard.getId().equals(standardId))
+							Configuration.standard = standard;
+
+					Configuration.unit = Unit.valueOf(unit);
+				}
 
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -96,6 +107,14 @@ public abstract class Configuration {
 		Configuration.standard = standard;
 	}
 
+	public static Unit getUnit() {
+		return unit;
+	}
+
+	public static void setUnit(Unit unit) {
+		Configuration.unit = unit;
+	}
+
 	public static void save() {
 		OutputStream bos = null;
 		try {
@@ -103,6 +122,7 @@ public abstract class Configuration {
 			messageJsonObject.put("version", VERSION);
 			messageJsonObject.put("language", locale.getLanguage());
 			messageJsonObject.put("standardId", standard.getId());
+			messageJsonObject.put("unit", unit.toString());
 
 			File file = new File(PREFERENCES_FILE_PATH);
 

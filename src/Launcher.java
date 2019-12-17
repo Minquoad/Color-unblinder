@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Robot;
+import java.io.IOException;
 import java.util.Locale;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -14,11 +15,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -30,6 +32,7 @@ import model.LabeledColorInventory;
 import model.standard.Standard;
 import tool.Configuration;
 import tool.InternationalizationTool;
+import tool.Unit;
 
 public class Launcher extends Application {
 
@@ -42,7 +45,7 @@ public class Launcher extends Application {
 	private Robot robot;
 
 	private Stage stage;
-	private BorderPane mainXontainer;
+	private BorderPane mainContainer;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -53,35 +56,63 @@ public class Launcher extends Application {
 
 			loader = new FXMLLoader();
 			loader.setLocation(Launcher.class.getResource("view/Permanent.fxml"));
-			mainXontainer = (BorderPane) loader.load();
+			mainContainer = (BorderPane) loader.load();
 
-			for (Node children : ((Pane) mainXontainer.getTop()).getChildren()) {
+			for (Node children : ((Pane) mainContainer.getTop()).getChildren()) {
 
 				if ("configurationMenus".equals(children.getId())) {
 					for (Menu menu : ((MenuBar) children).getMenus()) {
-						if ("language".equals(menu.getId())) {
 
-							ToggleGroup toggleGroup = new ToggleGroup();
-							for (Locale locale : InternationalizationTool.getSupportedLocales()) {
-								RadioMenuItem item = new RadioMenuItem();
-								item.setToggleGroup(toggleGroup);
-								item.setId(locale.getLanguage());
-								item.setText(InternationalizationTool.getText(locale.getLanguage(), "resources/Permanent"));
-								item.setSelected(locale.equals(Configuration.getLocale()));
-								item.addEventHandler(ActionEvent.ACTION, event -> {
-									Configuration.setLocale(locale);
-									triggerLanguageChanged();
-								});
-								menu.getItems().add(item);
+						if ("option".equals(menu.getId())) {
+							for (MenuItem menuItem : menu.getItems()) {
+
+								if ("language".equals(menuItem.getId())) {
+
+									ToggleGroup toggleGroup = new ToggleGroup();
+									for (Locale locale : InternationalizationTool.getSupportedLocales()) {
+										RadioMenuItem item = new RadioMenuItem();
+										item.setToggleGroup(toggleGroup);
+										item.setId(locale.getLanguage());
+										item.setText(InternationalizationTool.getText(locale.getLanguage(), "resources/Permanent"));
+										item.setSelected(locale.equals(Configuration.getLocale()));
+										item.addEventHandler(ActionEvent.ACTION, event -> {
+											Configuration.setLocale(locale);
+											triggerLanguageChanged();
+										});
+										((Menu) menuItem).getItems().add(item);
+									}
+
+								}
 							}
-
 						}
 					}
 				} else if ("windowButtonsPan".equals(children.getId())) {
 
 					for (Node buttonNode : ((Pane) children).getChildren()) {
 						Button button = (Button) buttonNode;
+
 						if ("about".equals(button.getId())) {
+							button.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+
+								try {
+									FXMLLoader aboutLoader = new FXMLLoader();
+									aboutLoader.setLocation(Launcher.class.getResource("view/About.fxml"));
+									Pane about = (Pane) aboutLoader.load();
+									for (Node aboutChildren : about.getChildren())
+										if ("version".equals(aboutChildren.getId()))
+											((Text) aboutChildren).setText(Configuration.VERSION);
+
+									Stage dialog = new Stage();
+									dialog.initOwner(stage);
+									dialog.setScene(new Scene(about));
+									dialog.getIcons().add(getIcon());
+									dialog.setResizable(false);
+									dialog.showAndWait();
+
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
+							});
 
 						} else if ("close".equals(button.getId())) {
 							button.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> stage.close());
@@ -101,15 +132,16 @@ public class Launcher extends Application {
 			stage.setTitle("Color-unblinder");
 			stage.setAlwaysOnTop(true);
 			stage.initStyle(StageStyle.UNDECORATED);
-			stage.setScene(new Scene(mainXontainer));
+			stage.setScene(new Scene(mainContainer));
 			stage.setResizable(false);
+			stage.getIcons().add(getIcon());
 			stage.show();
 
-			mainXontainer.setOnMousePressed(event -> {
+			mainContainer.setOnMousePressed(event -> {
 				xOffset = event.getSceneX();
 				yOffset = event.getSceneY();
 			});
-			mainXontainer.setOnMouseDragged(event -> {
+			mainContainer.setOnMouseDragged(event -> {
 				stage.setX(event.getScreenX() - xOffset);
 				stage.setY(event.getScreenY() - yOffset);
 			});
@@ -128,14 +160,63 @@ public class Launcher extends Application {
 
 	public void triggerLanguageChanged() {
 
-		for (Node children : ((Pane) mainXontainer.getTop()).getChildren()) {
+		for (Node children : ((Pane) mainContainer.getTop()).getChildren()) {
+
+			if ("configurationMenus".equals(children.getId())) {
+				for (Menu menu : ((MenuBar) children).getMenus()) {
+
+					if ("option".equals(menu.getId())) {
+
+						((Text) menu.getGraphic()).setText(InternationalizationTool.getText("Option", "resources/Permanent"));
+
+						for (MenuItem menuItem : menu.getItems()) {
+
+							if ("standard".equals(menuItem.getId())) {
+
+								((Menu) menuItem).setText(InternationalizationTool.getText("Standard", "resources/Permanent"));
+
+								((Menu) menuItem).getItems().clear();
+
+								ToggleGroup toggleGroup = new ToggleGroup();
+								for (Standard standard : Standard.getAll(Configuration.getLocale())) {
+									RadioMenuItem item = new RadioMenuItem();
+									item.setToggleGroup(toggleGroup);
+									item.setId(standard.getId());
+									item.setText(standard.getName());
+									item.setSelected(standard.equals(Configuration.getStandard()));
+									item.addEventHandler(ActionEvent.ACTION, event -> {
+										Configuration.setStandard(standard);
+										updateDisplay();
+									});
+									((Menu) menuItem).getItems().add(item);
+								}
+
+							} else if ("unit".equals(menuItem.getId())) {
+
+								((Menu) menuItem).setText(InternationalizationTool.getText("Unit", "resources/Permanent"));
+
+								for (MenuItem unit : ((Menu) menuItem).getItems()) {
+									((RadioMenuItem) unit).setSelected(Configuration.getUnit().toString().equals(unit.getId()));
+									((RadioMenuItem) unit).addEventHandler(ActionEvent.ACTION, event -> {
+										Configuration.setUnit(Unit.valueOf(unit.getId()));
+										updateDisplay();
+									});
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		for (Node children : ((Pane) mainContainer.getTop()).getChildren()) {
 
 			if ("configurationMenus".equals(children.getId())) {
 				for (Menu menu : ((MenuBar) children).getMenus()) {
 
 					if ("standard".equals(menu.getId())) {
 
-						((Label) menu.getGraphic()).setText(InternationalizationTool.getText("Standard", "resources/Permanent"));
+						((Text) menu.getGraphic()).setText(InternationalizationTool.getText("Standard", "resources/Permanent"));
 
 						menu.getItems().clear();
 
@@ -188,52 +269,42 @@ public class Launcher extends Application {
 			color = inventory.getClosestLabeledColor(red, green, blue);
 		}
 
-		for (Node children : ((Pane) mainXontainer.getCenter()).getChildren()) {
-			
-			if ("confirmation".equals(children.getId())) {
-				((Pane) children).setStyle("-fx-background-color: rgb(" + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue() + ");");
+		for (Node children : ((Pane) mainContainer.getCenter()).getChildren()) {
+			Pane pane = ((Pane) children);
 
-			} else if ("informations".equals(children.getId())) {
-				for (Node subChildren : ((Pane) children).getChildren()) {
-					
-					if ("name".equals(subChildren.getId())) {
-						String text = null;
-						if (approximate) {
-							text = "≈";
-						} else {
-							text = "=";
-						}
-						text += " " + color.getName();
-						((Text) subChildren).setText(text);
+			if ("confirmation".equals(pane.getId())) {
+				pane.setStyle("-fx-background-color: rgb(" + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue() + ");");
 
-					} else if ("description".equals(subChildren.getId())) {
-						String text = InternationalizationTool.getText("R", "resources/Permanent")
+			} else if ("rightness".equals(pane.getId())) {
+				((Text) pane.getChildren().get(0)).setText(approximate ? "≈" : "=");
+
+			} else if ("name".equals(pane.getId())) {
+				((Text) pane.getChildren().get(0)).setText(color.getName());
+
+			} else if ("r".equals(pane.getId())) {
+				((Text) pane.getChildren().get(0)).setText(
+						InternationalizationTool.getText("R", "resources/Permanent")
 								+ ":"
-								+ subColorToPercent(color.getRed())
-								+ "%    "
-								+ InternationalizationTool.getText("G", "resources/Permanent")
-								+ ":"
-								+ subColorToPercent(color.getGreen())
-								+ "%    "
-								+ InternationalizationTool.getText("B", "resources/Permanent")
-								+ ":"
-								+ subColorToPercent(color.getBlue())
-								+ "%";
+								+ Configuration.getUnit().format(color.getRed()));
 
-						((Text) subChildren).setText(text);
+			} else if ("g".equals(pane.getId())) {
+				((Text) pane.getChildren().get(0)).setText(
+						InternationalizationTool.getText("G", "resources/Permanent")
+								+ ":"
+								+ Configuration.getUnit().format(color.getGreen()));
 
-					}
-				}
+			} else if ("b".equals(pane.getId())) {
+				((Text) pane.getChildren().get(0)).setText(
+						InternationalizationTool.getText("B", "resources/Permanent")
+								+ ":"
+								+ Configuration.getUnit().format(color.getBlue()));
 			}
 		}
 
 	}
 
-	public static String subColorToPercent(int original) {
-		String str = Integer.toString((int) Math.round(100f * ((float) original) / 255f));
-		while (str.length() < 3)
-			str = " " + str;
-		return str;
+	public static Image getIcon() {
+		return new Image(Launcher.class.getClassLoader().getResourceAsStream("resources/icon.png"));
 	}
 
 	public static void main(String[] args) {
