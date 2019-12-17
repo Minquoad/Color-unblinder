@@ -13,7 +13,11 @@ public class InternationalizationTool {
 	public static Locale[] getSupportedLocales() {
 		Locale[] locales = {
 				Locale.ENGLISH,
-				Locale.FRENCH
+				Locale.FRENCH,
+				new Locale("nl"),
+				Locale.ITALIAN,
+				new Locale("es"),
+				Locale.GERMAN,
 		};
 		return locales;
 	}

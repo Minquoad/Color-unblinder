@@ -53,8 +53,10 @@ public class LabeledColorInventory {
 				}
 			}
 
-			color = new LabeledColor(closestColor.getName(), red, green, blue);
-			approximateColorMap.put(color.toInteger(), color);
+			if (closestColor != null) {
+				color = new LabeledColor(closestColor.getName(), red, green, blue);
+				approximateColorMap.put(color.toInteger(), color);
+			}
 		}
 
 		return color;

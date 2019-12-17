@@ -27,11 +27,11 @@ public abstract class Configuration {
 			+ "/Color-unblinder"
 			+ "/preferences.json";
 
-	public static final String VERSION = "0.1.6";
+	public static final String VERSION = "0.1.8";
 
 	private static Locale locale;
 	private static Standard standard;
-	private static Unit unit;
+	private static RgbUnit rgbUnit;
 
 	static {
 		Locale defaultLocale = Locale.getDefault();
@@ -40,7 +40,7 @@ public abstract class Configuration {
 				locale = supportedLocale;
 
 		standard = new HtmlStandard(locale);
-		unit = Unit.BITS;
+		rgbUnit = RgbUnit.BITS;
 
 		File file = new File(PREFERENCES_FILE_PATH);
 		if (file.exists()) {
@@ -63,7 +63,7 @@ public abstract class Configuration {
 
 					String language = rootNode.findValue("language").asText();
 					String standardId = rootNode.findValue("standardId").asText();
-					String unit = rootNode.findValue("unit").asText();
+					String unit = rootNode.findValue("rgbUnit").asText();
 
 					locale = new Locale(language);
 
@@ -71,7 +71,7 @@ public abstract class Configuration {
 						if (standard.getId().equals(standardId))
 							Configuration.standard = standard;
 
-					Configuration.unit = Unit.valueOf(unit);
+					Configuration.rgbUnit = RgbUnit.valueOf(unit);
 				}
 
 			} catch (IOException e) {
@@ -107,12 +107,12 @@ public abstract class Configuration {
 		Configuration.standard = standard;
 	}
 
-	public static Unit getUnit() {
-		return unit;
+	public static RgbUnit getRgbUnit() {
+		return rgbUnit;
 	}
 
-	public static void setUnit(Unit unit) {
-		Configuration.unit = unit;
+	public static void setRgbUnit(RgbUnit rgbUnit) {
+		Configuration.rgbUnit = rgbUnit;
 	}
 
 	public static void save() {
@@ -122,7 +122,7 @@ public abstract class Configuration {
 			messageJsonObject.put("version", VERSION);
 			messageJsonObject.put("language", locale.getLanguage());
 			messageJsonObject.put("standardId", standard.getId());
-			messageJsonObject.put("unit", unit.toString());
+			messageJsonObject.put("rgbUnit", rgbUnit.toString());
 
 			File file = new File(PREFERENCES_FILE_PATH);
 

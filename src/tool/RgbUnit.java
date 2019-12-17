@@ -1,6 +1,6 @@
 package tool;
 
-public enum Unit {
+public enum RgbUnit {
 
 	PERCENT(i -> {
 		String str = Integer.toString((int) Math.round(100f * ((float) i) / 255f));
@@ -17,7 +17,7 @@ public enum Unit {
 
 	private Formater formater;
 
-	private Unit(Formater formater) {
+	private RgbUnit(Formater formater) {
 		this.formater = formater;
 	}
 

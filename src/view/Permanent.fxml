@@ -32,14 +32,13 @@
                      <items>
                       <Menu id="language" mnemonicParsing="false" text="Language" />
                       <Menu id="standard" mnemonicParsing="false" text="Standard" />
-                        <Menu id="unit" mnemonicParsing="false" text="Unit">
+                        <Menu id="rgbUnit" mnemonicParsing="false" text="RGB unit">
                            <items>
-                              <RadioMenuItem id="PERCENT" mnemonicParsing="false" text="\%">
+                              <RadioMenuItem id="BITS" mnemonicParsing="false" text="/255">
                                  <toggleGroup>
                                     <ToggleGroup fx:id="unit" />
-                                 </toggleGroup>
-                              </RadioMenuItem>
-                              <RadioMenuItem id="BITS" mnemonicParsing="false" text="8 bits" toggleGroup="$unit" />
+                                 </toggleGroup></RadioMenuItem>
+                              <RadioMenuItem id="PERCENT" mnemonicParsing="false" text="\%" toggleGroup="$unit" />
                            </items>
                         </Menu>
                      </items>

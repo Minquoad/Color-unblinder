@@ -35,9 +35,8 @@ public abstract class Standard {
 	public static Standard[] getAll(Locale locale) {
 		Standard[] standards = {
 				new HtmlStandard(locale),
-				new Html2Standard(locale)
+				new RalClassic(locale)
 		};
-
 		return standards;
 	}
 

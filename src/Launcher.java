@@ -32,7 +32,7 @@ import model.LabeledColorInventory;
 import model.standard.Standard;
 import tool.Configuration;
 import tool.InternationalizationTool;
-import tool.Unit;
+import tool.RgbUnit;
 
 public class Launcher extends Application {
 
@@ -191,14 +191,14 @@ public class Launcher extends Application {
 									((Menu) menuItem).getItems().add(item);
 								}
 
-							} else if ("unit".equals(menuItem.getId())) {
+							} else if ("rgbUnit".equals(menuItem.getId())) {
 
-								((Menu) menuItem).setText(InternationalizationTool.getText("Unit", "resources/Permanent"));
+								((Menu) menuItem).setText(InternationalizationTool.getText("rgbUnit", "resources/Permanent"));
 
-								for (MenuItem unit : ((Menu) menuItem).getItems()) {
-									((RadioMenuItem) unit).setSelected(Configuration.getUnit().toString().equals(unit.getId()));
-									((RadioMenuItem) unit).addEventHandler(ActionEvent.ACTION, event -> {
-										Configuration.setUnit(Unit.valueOf(unit.getId()));
+								for (MenuItem rgbUnit : ((Menu) menuItem).getItems()) {
+									((RadioMenuItem) rgbUnit).setSelected(Configuration.getRgbUnit().toString().equals(rgbUnit.getId()));
+									((RadioMenuItem) rgbUnit).addEventHandler(ActionEvent.ACTION, event -> {
+										Configuration.setRgbUnit(RgbUnit.valueOf(rgbUnit.getId()));
 										updateDisplay();
 									});
 								}
@@ -273,31 +273,32 @@ public class Launcher extends Application {
 			Pane pane = ((Pane) children);
 
 			if ("confirmation".equals(pane.getId())) {
-				pane.setStyle("-fx-background-color: rgb(" + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue() + ");");
+				pane.setStyle("-fx-background-color: rgb(" + red + ", " + green + ", " + blue + ");");
 
 			} else if ("rightness".equals(pane.getId())) {
-				((Text) pane.getChildren().get(0)).setText(approximate ? "≈" : "=");
+				((Text) pane.getChildren().get(0)).setText(color == null ? "x" : (approximate ? "≈" : "="));
 
 			} else if ("name".equals(pane.getId())) {
-				((Text) pane.getChildren().get(0)).setText(color.getName());
+				String text = color == null ? InternationalizationTool.getText("StandardNotDefined", "resources/Permanent") : color.getName();
+				((Text) pane.getChildren().get(0)).setText(text);
 
 			} else if ("r".equals(pane.getId())) {
 				((Text) pane.getChildren().get(0)).setText(
 						InternationalizationTool.getText("R", "resources/Permanent")
 								+ ":"
-								+ Configuration.getUnit().format(color.getRed()));
+								+ Configuration.getRgbUnit().format(red));
 
 			} else if ("g".equals(pane.getId())) {
 				((Text) pane.getChildren().get(0)).setText(
 						InternationalizationTool.getText("G", "resources/Permanent")
 								+ ":"
-								+ Configuration.getUnit().format(color.getGreen()));
+								+ Configuration.getRgbUnit().format(green));
 
 			} else if ("b".equals(pane.getId())) {
 				((Text) pane.getChildren().get(0)).setText(
 						InternationalizationTool.getText("B", "resources/Permanent")
 								+ ":"
-								+ Configuration.getUnit().format(color.getBlue()));
+								+ Configuration.getRgbUnit().format(blue));
 			}
 		}
 
