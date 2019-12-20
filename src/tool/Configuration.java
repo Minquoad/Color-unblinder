@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import model.standard.HtmlStandard;
+import model.standard.RalClassic;
 import model.standard.Standard;
 
 public abstract class Configuration {
@@ -27,7 +27,7 @@ public abstract class Configuration {
 			+ "/Color-unblinder"
 			+ "/preferences.json";
 
-	public static final String VERSION = "0.1.8";
+	public static final String VERSION = "1.0.0";
 
 	private static Locale locale;
 	private static Standard standard;
@@ -39,7 +39,7 @@ public abstract class Configuration {
 			if (locale == null || defaultLocale.getLanguage().equals(supportedLocale.getLanguage()))
 				locale = supportedLocale;
 
-		standard = new HtmlStandard(locale);
+		standard = new RalClassic(locale);
 		rgbUnit = RgbUnit.BITS;
 
 		File file = new File(PREFERENCES_FILE_PATH);

@@ -23,8 +23,8 @@
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Version :" GridPane.rowIndex="1" />
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Color-unblinder" GridPane.columnIndex="2" />
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Creator :" GridPane.rowIndex="2" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Guénaël Dequeker" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="My father, Jan" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Minquoad" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="My father" GridPane.columnIndex="2" GridPane.rowIndex="3" />
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Dedication to :" GridPane.rowIndex="3" />
    </children>
 </GridPane>

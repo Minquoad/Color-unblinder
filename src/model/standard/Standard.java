@@ -35,7 +35,9 @@ public abstract class Standard {
 	public static Standard[] getAll(Locale locale) {
 		Standard[] standards = {
 				new HtmlStandard(locale),
-				new RalClassic(locale)
+				new RalClassic(locale),
+				new FullPantone(locale),
+				new NamePantone(locale),
 		};
 		return standards;
 	}

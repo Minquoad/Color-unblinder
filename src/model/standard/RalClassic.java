@@ -4,7 +4,6 @@ import java.util.Locale;
 
 import model.LabeledColor;
 import model.LabeledColorInventory;
-import tool.Configuration;
 
 public class RalClassic extends Standard {
 
@@ -19,13 +18,13 @@ public class RalClassic extends Standard {
 
 	@Override
 	public String getName() {
-		return "Reichsausschuß für Lieferbedingungen (RAL Classic)";
+		return "RAL Classic";
 	}
 
 	@Override
 	public void fillInventory(LabeledColorInventory inventory) {
 
-		if (Configuration.getLocale().equals(new Locale("nl"))) {
+		if (getLocale().equals(new Locale("nl"))) {
 			inventory.add(new LabeledColor("Groenbeige", 190, 189, 127));
 			inventory.add(new LabeledColor("Beige", 194, 176, 120));
 			inventory.add(new LabeledColor("Zandgeel", 198, 166, 100));
@@ -240,7 +239,7 @@ public class RalClassic extends Standard {
 			inventory.add(new LabeledColor("Parelmoer, lichtgrijs", 156, 156, 156));
 			inventory.add(new LabeledColor("Parelmoer, donkergrijs", 130, 130, 130));
 		}
-		if (Configuration.getLocale().equals(Locale.ITALIAN)) {
+		if (getLocale().equals(Locale.ITALIAN)) {
 			inventory.add(new LabeledColor("Beige verdastro", 190, 189, 127));
 			inventory.add(new LabeledColor("Beige", 194, 176, 120));
 			inventory.add(new LabeledColor("Giallo sabbia", 198, 166, 100));
@@ -455,7 +454,7 @@ public class RalClassic extends Standard {
 			inventory.add(new LabeledColor("Grigio chiaro perlato", 156, 156, 156));
 			inventory.add(new LabeledColor("Grigio scuro perlato", 130, 130, 130));
 		}
-		if (Configuration.getLocale().equals(new Locale("es"))) {
+		if (getLocale().equals(new Locale("es"))) {
 			inventory.add(new LabeledColor("Beige verdoso", 190, 189, 127));
 			inventory.add(new LabeledColor("Beige", 194, 176, 120));
 			inventory.add(new LabeledColor("Amarillo arena", 198, 166, 100));
@@ -670,7 +669,7 @@ public class RalClassic extends Standard {
 			inventory.add(new LabeledColor("Gris claro perlado", 156, 156, 156));
 			inventory.add(new LabeledColor("Gris oscuro perlado", 130, 130, 130));
 		}
-		if (Configuration.getLocale().equals(Locale.FRENCH)) {
+		if (getLocale().equals(Locale.FRENCH)) {
 			inventory.add(new LabeledColor("Beige vert", 190, 189, 127));
 			inventory.add(new LabeledColor("Beige", 194, 176, 120));
 			inventory.add(new LabeledColor("Jaune sable", 198, 166, 100));
@@ -885,7 +884,7 @@ public class RalClassic extends Standard {
 			inventory.add(new LabeledColor("Gris clair nacré", 156, 156, 156));
 			inventory.add(new LabeledColor("Gris fonçé nacré", 130, 130, 130));
 		}
-		if (Configuration.getLocale().equals(Locale.GERMAN)) {
+		if (getLocale().equals(Locale.GERMAN)) {
 			inventory.add(new LabeledColor("Grünbeige", 190, 189, 127));
 			inventory.add(new LabeledColor("Beige", 194, 176, 120));
 			inventory.add(new LabeledColor("Sandgelb", 198, 166, 100));
@@ -1100,7 +1099,7 @@ public class RalClassic extends Standard {
 			inventory.add(new LabeledColor("Perlhellgrau", 156, 156, 156));
 			inventory.add(new LabeledColor("Perldunkelgrau", 130, 130, 130));
 		}
-		if (Configuration.getLocale().equals(Locale.ENGLISH)) {
+		if (getLocale().equals(Locale.ENGLISH)) {
 			inventory.add(new LabeledColor("Green beige", 190, 189, 127));
 			inventory.add(new LabeledColor("Beige", 194, 176, 120));
 			inventory.add(new LabeledColor("Sand yellow", 198, 166, 100));
