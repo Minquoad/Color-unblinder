@@ -18,7 +18,7 @@ public class NamePantone extends Standard {
 
 	@Override
 	public String getName() {
-		return "Pantone (names)";
+		return "Pantone (Names)";
 	}
 
 	@Override

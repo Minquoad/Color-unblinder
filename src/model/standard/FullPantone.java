@@ -18,7 +18,7 @@ public class FullPantone extends Standard {
 
 	@Override
 	public String getName() {
-		return "Pantone (full)";
+		return "Pantone (Full)";
 	}
 
 	@Override
