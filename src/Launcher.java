@@ -5,10 +5,9 @@ import java.awt.Point;
 import java.awt.Robot;
 import java.io.IOException;
 import java.util.Locale;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -27,6 +26,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import model.LabeledColor;
 import model.LabeledColorInventory;
 import model.standard.Standard;
@@ -41,7 +41,7 @@ public class Launcher extends Application {
 	private double xOffset = 0;
 	private double yOffset = 0;
 
-	private ScheduledExecutorService scheduler;
+	private Timeline scheduler;
 	private Robot robot;
 
 	private Stage stage;
@@ -135,7 +135,6 @@ public class Launcher extends Application {
 			stage.setScene(new Scene(mainContainer));
 			stage.setResizable(false);
 			stage.getIcons().add(getIcon());
-			stage.show();
 
 			mainContainer.setOnMousePressed(event -> {
 				xOffset = event.getSceneX();
@@ -146,12 +145,14 @@ public class Launcher extends Application {
 				stage.setY(event.getScreenY() - yOffset);
 			});
 
-			scheduler = Executors.newSingleThreadScheduledExecutor();
-			scheduler.scheduleAtFixedRate(
-					() -> this.updateDisplay(),
-					0l,
-					1000l / 3l,
-					TimeUnit.MILLISECONDS);
+			stage.show();
+
+			scheduler = new Timeline(
+					new KeyFrame(
+							Duration.millis(1000l / 3l),
+							event -> this.updateDisplay()));
+			scheduler.setCycleCount(Timeline.INDEFINITE);
+			scheduler.play();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -244,7 +245,7 @@ public class Launcher extends Application {
 
 	@Override
 	public void stop() throws Exception {
-		scheduler.shutdown();
+		scheduler.stop();
 		Configuration.save();
 		super.stop();
 	}
@@ -269,6 +270,11 @@ public class Launcher extends Application {
 			color = inventory.getClosestLabeledColor(red, green, blue);
 		}
 
+		String name = color == null ? InternationalizationTool.getText("StandardNotDefined", "resources/Permanent") : color.getName();
+		String accuracySymbol = color == null ? "x" : (approximate ? "≈" : "=");
+		if (stage != null)
+			stage.setTitle(accuracySymbol + " " + name);
+
 		for (Node children : ((Pane) mainContainer.getCenter()).getChildren()) {
 			Pane pane = ((Pane) children);
 
@@ -276,11 +282,10 @@ public class Launcher extends Application {
 				pane.setStyle("-fx-background-color: rgb(" + red + ", " + green + ", " + blue + ");");
 
 			} else if ("rightness".equals(pane.getId())) {
-				((Text) pane.getChildren().get(0)).setText(color == null ? "x" : (approximate ? "≈" : "="));
+				((Text) pane.getChildren().get(0)).setText(accuracySymbol);
 
 			} else if ("name".equals(pane.getId())) {
-				String text = color == null ? InternationalizationTool.getText("StandardNotDefined", "resources/Permanent") : color.getName();
-				((Text) pane.getChildren().get(0)).setText(text);
+				((Text) pane.getChildren().get(0)).setText(name);
 
 			} else if ("r".equals(pane.getId())) {
 				((Text) pane.getChildren().get(0)).setText(
