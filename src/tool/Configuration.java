@@ -27,7 +27,9 @@ public abstract class Configuration {
 			+ "/Color-unblinder"
 			+ "/preferences.json";
 
-	public static final String VERSION = "1.3.0";
+	public static final String VERSION = "1.3.1";
+
+	private static final String OLDEST_SUPPORTED_PREFERENCES_VERSION = "1.0.0";
 
 	private static Locale locale;
 	private static Standard standard;
@@ -59,7 +61,12 @@ public abstract class Configuration {
 				JsonNode rootNode = new ObjectMapper().readTree(new String(bos.toByteArray()));
 
 				String version = rootNode.findValue("version").asText();
-				if (Configuration.VERSION.equals(version)) {
+				if (getVersionComponent(version, 0) > getVersionComponent(OLDEST_SUPPORTED_PREFERENCES_VERSION, 0)
+						|| (getVersionComponent(version, 0) == getVersionComponent(OLDEST_SUPPORTED_PREFERENCES_VERSION, 0)
+								&& getVersionComponent(version, 1) > getVersionComponent(OLDEST_SUPPORTED_PREFERENCES_VERSION, 1))
+						|| (getVersionComponent(version, 0) == getVersionComponent(OLDEST_SUPPORTED_PREFERENCES_VERSION, 0)
+								&& getVersionComponent(version, 1) == getVersionComponent(OLDEST_SUPPORTED_PREFERENCES_VERSION, 1)
+								&& getVersionComponent(version, 2) >= getVersionComponent(OLDEST_SUPPORTED_PREFERENCES_VERSION, 2))) {
 
 					String language = rootNode.findValue("language").asText();
 					String standardId = rootNode.findValue("standardId").asText();
@@ -71,7 +78,7 @@ public abstract class Configuration {
 						if (standard.getId().equals(standardId))
 							Configuration.standard = standard;
 
-					Configuration.rgbUnit = RgbUnit.valueOf(unit);
+					rgbUnit = RgbUnit.valueOf(unit);
 				}
 
 			} catch (IOException e) {
@@ -85,6 +92,10 @@ public abstract class Configuration {
 
 		}
 
+	}
+
+	public static int getVersionComponent(String version, int i) {
+		return Integer.parseInt(version.split("\\.")[i]);
 	}
 
 	public static Locale getLocale() {
