@@ -292,18 +292,29 @@ public class Launcher extends Application {
 						InternationalizationTool.getText("R", "resources/Permanent")
 								+ ":"
 								+ Configuration.getRgbUnit().format(red));
+				pane.setVisible(Configuration.getRgbUnit() != RgbUnit.HEXADECIMAL);
 
 			} else if ("g".equals(pane.getId())) {
 				((Text) pane.getChildren().get(0)).setText(
 						InternationalizationTool.getText("G", "resources/Permanent")
 								+ ":"
 								+ Configuration.getRgbUnit().format(green));
+				pane.setVisible(Configuration.getRgbUnit() != RgbUnit.HEXADECIMAL);
 
 			} else if ("b".equals(pane.getId())) {
 				((Text) pane.getChildren().get(0)).setText(
 						InternationalizationTool.getText("B", "resources/Permanent")
 								+ ":"
 								+ Configuration.getRgbUnit().format(blue));
+				pane.setVisible(Configuration.getRgbUnit() != RgbUnit.HEXADECIMAL);
+
+			} else if ("h".equals(pane.getId())) {
+				((Text) pane.getChildren().get(0)).setText(
+						"#"
+								+ Configuration.getRgbUnit().format(red)
+								+ Configuration.getRgbUnit().format(green)
+								+ Configuration.getRgbUnit().format(blue));
+				pane.setVisible(Configuration.getRgbUnit() == RgbUnit.HEXADECIMAL);
 			}
 		}
 

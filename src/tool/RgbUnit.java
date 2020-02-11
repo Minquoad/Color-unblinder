@@ -13,6 +13,12 @@ public enum RgbUnit {
 		while (str.length() < 4)
 			str = " " + str;
 		return str;
+	}),
+	HEXADECIMAL(i -> {
+		String str = Integer.toHexString(i).toUpperCase();
+		while (str.length() < 2)
+			str = "0" + str;
+		return str;
 	});
 
 	private Formater formater;

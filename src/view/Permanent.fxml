@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="256.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="256.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <GridPane prefHeight="25.0" BorderPane.alignment="CENTER">
         <columnConstraints>
@@ -39,6 +39,7 @@
                                     <ToggleGroup fx:id="unit" />
                                  </toggleGroup></RadioMenuItem>
                               <RadioMenuItem id="PERCENT" mnemonicParsing="false" text="\%" toggleGroup="$unit" />
+                              <RadioMenuItem id="HEXADECIMAL" mnemonicParsing="false" text="Hexadecimal" toggleGroup="$unit" />
                            </items>
                         </Menu>
                      </items>
@@ -83,7 +84,7 @@
                   </Text>
                </children>
             </AnchorPane>
-            <AnchorPane id="r" prefHeight="20.0" prefWidth="62.0" style="-fx-background-color: rgb(18, 18, 18);" AnchorPane.leftAnchor="55.0" AnchorPane.topAnchor="25.0">
+            <AnchorPane id="r" prefHeight="20.0" prefWidth="62.0" style="-fx-background-color: rgb(18, 18, 18);" visible="false" AnchorPane.leftAnchor="55.0" AnchorPane.topAnchor="25.0">
                <children>
                   <Text fill="#bfbfbf" layoutX="11.0" layoutY="14.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R:100%" textAlignment="CENTER">
                      <font>
@@ -92,7 +93,7 @@
                   </Text>
                </children>
             </AnchorPane>
-            <AnchorPane id="g" prefHeight="20.0" prefWidth="62.0" style="-fx-background-color: rgb(18, 18, 18);" AnchorPane.leftAnchor="122.0" AnchorPane.topAnchor="25.0">
+            <AnchorPane id="g" prefHeight="20.0" prefWidth="62.0" style="-fx-background-color: rgb(18, 18, 18);" visible="false" AnchorPane.leftAnchor="122.0" AnchorPane.topAnchor="25.0">
                <children>
                   <Text fill="#bfbfbf" layoutX="11.0" layoutY="14.0" strokeType="OUTSIDE" strokeWidth="0.0" text="G:  8%" textAlignment="CENTER">
                      <font>
@@ -101,9 +102,18 @@
                   </Text>
                </children>
             </AnchorPane>
-            <AnchorPane id="b" prefHeight="20.0" prefWidth="62.0" style="-fx-background-color: rgb(18, 18, 18);" AnchorPane.leftAnchor="189.0" AnchorPane.topAnchor="25.0">
+            <AnchorPane id="b" prefHeight="20.0" prefWidth="62.0" style="-fx-background-color: rgb(18, 18, 18);" visible="false" AnchorPane.leftAnchor="189.0" AnchorPane.topAnchor="25.0">
                <children>
                   <Text fill="#bfbfbf" layoutX="11.0" layoutY="14.0" strokeType="OUTSIDE" strokeWidth="0.0" text="B: 58%" textAlignment="CENTER">
+                     <font>
+                        <Font name="Consolas" size="12.0" />
+                     </font>
+                  </Text>
+               </children>
+            </AnchorPane>
+            <AnchorPane id="h" layoutX="10.0" layoutY="10.0" prefHeight="20.0" prefWidth="196.0" style="-fx-background-color: rgb(18, 18, 18);" visible="false" AnchorPane.leftAnchor="55.0" AnchorPane.topAnchor="25.0">
+               <children>
+                  <Text fill="#bfbfbf" layoutX="11.0" layoutY="14.0" strokeType="OUTSIDE" strokeWidth="0.0" text="#FF1493" textAlignment="CENTER">
                      <font>
                         <Font name="Consolas" size="12.0" />
                      </font>
